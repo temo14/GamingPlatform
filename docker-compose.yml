@@ -1,0 +1,100 @@
+services:
+  hub.api:
+    container_name: hub.api
+    build:
+      context: ./Hub
+      dockerfile: API/Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - gaming-platform-mq
+      - redis
+      - hub.db
+    networks:
+      - gaming-platform
+
+  leaderboard.api:
+    container_name: leaderboard.api
+    build:
+      context: ./Leaderboard
+      dockerfile: API/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - gaming-platform-mq
+      - redis
+      - leaderboard.db
+    networks:
+      - gaming-platform
+
+  game.api:
+    container_name: game.api
+    build:
+      context: ./Game
+      dockerfile: API/Dockerfile
+    ports:
+      - "7000:7000"
+    depends_on:
+      - hub.api
+      - redis
+    networks:
+      - gaming-platform
+
+  gaming-platform-mq:
+    image: rabbitmq:4.0-management
+    container_name: gaming-platform-mq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - gaming-platform
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - gaming-platform
+    volumes:
+      - redis-data:/data
+
+  hub.db:
+    container_name: hub.db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "1433:1433"
+    networks:
+      - gaming-platform
+    volumes:
+      - hub-db-data:/var/opt/mssql
+
+  leaderboard.db:
+    container_name: leaderboard.db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "1434:1433"
+    networks:
+      - gaming-platform
+    volumes:
+      - leaderboard-db-data:/var/opt/mssql
+
+networks:
+  gaming-platform:
+    name: gaming-platform
+    driver: bridge
+
+volumes:
+  redis-data:
+  rabbitmq-data:
+  hub-db-data:
+  leaderboard-db-data:

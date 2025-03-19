@@ -1,0 +1,53 @@
+services:
+  hub.api:
+    environment:
+      ASPNETCORE_URLS: "http://+:5000"
+      ConnectionStrings__Db: "Server=hub.db,1433;Database=HubDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__Redis: "redis:6379,abortConnect=false"
+      JwtSettings__Key: "${JWT_SECRET_KEY}"
+      JwtSettings__Issuer: "GamingPlatform"
+      JwtSettings__AccessTokenExpirationInMinutes: "60"
+      RabbitMQ__HostName: "gaming-platform-mq"
+      RabbitMQ__Port: "5672"
+      RabbitMQ__BetExchange: "bet_events"
+      RabbitMQ__PrizeExchange: "prize_events"
+
+  leaderboard.api:
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+      ConnectionStrings__Db: "Server=leaderboard.db,1433;Database=LeaderboardDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__Redis: "redis:6379,abortConnect=false"
+      JwtSettings__Key: "${JWT_SECRET_KEY}"
+      JwtSettings__Issuer: "GamingPlatform"
+      JwtSettings__AccessTokenExpirationInMinutes: "60"
+      RabbitMQ__HostName: "gaming-platform-mq"
+      RabbitMQ__Port: "5672"
+      RabbitMQ__BetExchange: "bet_events"
+      RabbitMQ__PrizeExchange: "prize_events"
+      LeaderboardSettings__MaxLeaderboardEntries: "10"
+      LeaderboardSettings__LeaderboardDataRetentionDays: "7"
+      LeaderboardSettings__PlayerDataRetentionDays: "30"
+      LeaderboardSettings__PrizeConfiguration__0__Rank: "1"
+      LeaderboardSettings__PrizeConfiguration__0__Amount: "100.00"
+      LeaderboardSettings__PrizeConfiguration__1__Rank: "2"
+      LeaderboardSettings__PrizeConfiguration__1__Amount: "50.00"
+      LeaderboardSettings__PrizeConfiguration__2__Rank: "3"
+      LeaderboardSettings__PrizeConfiguration__2__Amount: "25.00"
+      LeaderboardSettings__PrizeConfiguration__3__Rank: "4"
+      LeaderboardSettings__PrizeConfiguration__3__Amount: "10.00"
+      LeaderboardSettings__PrizeConfiguration__4__Rank: "5"
+      LeaderboardSettings__PrizeConfiguration__4__Amount: "5.00"
+
+  game.api:
+    environment:
+      ASPNETCORE_URLS: "http://+:7000"
+      JwtSettings__Key: "${JWT_SECRET_KEY}"
+      JwtSettings__Issuer: "GamingPlatform"
+      JwtSettings__AccessTokenExpirationInMinutes: "60"
+      HubService__BaseUrl: "http://hub.api:5000"
+      HubService__BetEndPoint: "api/bet"
+
+  gaming-platform-mq:
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD}"
