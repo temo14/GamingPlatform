@@ -15,7 +15,10 @@ var app = builder.Build();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.DocumentTitle = "Game - Swagger UI";
+});
 
 app.UseAuthentication();
 

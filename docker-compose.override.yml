@@ -2,7 +2,7 @@ services:
   hub.api:
     environment:
       ASPNETCORE_URLS: "http://+:5000"
-      ConnectionStrings__Db: "Server=hub.db,1433;Database=HubDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__Db: "Server=hub.db,1433;Initial Catalog=HubDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
       ConnectionStrings__Redis: "redis:6379,abortConnect=false"
       JwtSettings__Key: "${JWT_SECRET_KEY}"
       JwtSettings__Issuer: "GamingPlatform"
@@ -15,7 +15,7 @@ services:
   leaderboard.api:
     environment:
       ASPNETCORE_URLS: "http://+:8080"
-      ConnectionStrings__Db: "Server=leaderboard.db,1433;Database=LeaderboardDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__Db: "Server=leaderboard.db,1433;Initial Catalog=LeaderboardDb;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True"
       ConnectionStrings__Redis: "redis:6379,abortConnect=false"
       JwtSettings__Key: "${JWT_SECRET_KEY}"
       JwtSettings__Issuer: "GamingPlatform"

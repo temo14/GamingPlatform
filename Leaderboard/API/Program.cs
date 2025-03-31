@@ -16,7 +16,10 @@ var app = builder.Build();
 app.InitializeDatabase();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.DocumentTitle = "Leaderboard - Swagger UI";
+});
 
 app.UseAuthentication();
 

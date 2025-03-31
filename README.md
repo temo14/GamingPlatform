@@ -19,6 +19,6 @@
    for that authenticate to Hub and use token to open [Leaderboard Swagger UI](http://localhost:8080/swagger/index.html) and trigger the process.
 
 ## API Documentation
-- Hub API: [http://localhost:5000/swagger/index.html]
-- Leaderboard API: [http://localhost:8080/swagger/index.html]
-- Game API: [http://localhost:7000/swagger/index.html]
+- Hub API: [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html)
+- Leaderboard API: [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+- Game API: [http://localhost:7000/swagger/index.html](http://localhost:7000/swagger/index.html)

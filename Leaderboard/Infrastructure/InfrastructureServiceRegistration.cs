@@ -7,6 +7,7 @@ using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,9 +38,17 @@ public static class InfrastructureServiceRegistration
         using (var serviceScope = app.Services.CreateScope())
         {
             var context = serviceScope.ServiceProvider.GetRequiredService<LeaderboardDbContext>();
-            FormattableString sqlQuery = $"SELECT COUNT(*) FROM sys.databases WHERE name = 'LeaderboardDb'";
-            var dbExists = context.Database.CanConnect() && context.Database.SqlQuery<int>(sqlQuery).FirstOrDefault() > 0;
+            var dbExists = false;
 
+            using (var connection = new SqlConnection(context.Database.GetConnectionString()))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = $"SELECT COUNT(*) FROM sys.databases WHERE name = 'LeaderboardDb'";
+                    dbExists = ((int)command.ExecuteScalar()) > 0;
+                }
+            }
             if (!dbExists)
             {
                 context.Database.EnsureCreated();

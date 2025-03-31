@@ -7,9 +7,9 @@ services:
     ports:
       - "5000:5000"
     depends_on:
+      - hub.db
       - gaming-platform-mq
       - redis
-      - hub.db
     networks:
       - gaming-platform
 
@@ -21,9 +21,9 @@ services:
     ports:
       - "8080:8080"
     depends_on:
+      - leaderboard.db
       - gaming-platform-mq
       - redis
-      - leaderboard.db
     networks:
       - gaming-platform
 
